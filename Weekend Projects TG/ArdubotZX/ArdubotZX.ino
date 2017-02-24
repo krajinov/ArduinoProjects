@@ -3,7 +3,7 @@
 // this code is public domain, enjoy!
 
 #include <AFMotor.h>
-#include <Servo.h> 
+#include <Servo.h>
 
 // DC motor on M1&M2
 AF_DCMotor motorL(1);
@@ -42,11 +42,11 @@ int i;
 void setup() {
   Serial.begin(9600);           // set up Serial library at 9600 bps
   Serial.println("Initializing Ardubot!");
-  
+
   // turn on servo
   servo_head.attach(10);
   servo_head.write(90);
-    
+
   // turn on motor #2
   motorL.setSpeed(255);
   motorR.setSpeed(255);
@@ -56,7 +56,7 @@ void setup() {
 
 // Test the DC motor, stepper and servo ALL AT ONCE!
 void loop() {
- go();
+  go();
 }
 
 
@@ -68,32 +68,32 @@ int scan()                               //This function determines the distance
 {
   long pulse;
   Serial.println("Scanning distance");
-  digitalWrite(TRIG_PIN,LOW);
-  delayMicroseconds(5);                                                                              
-  digitalWrite(TRIG_PIN,HIGH);
+  digitalWrite(TRIG_PIN, LOW);
+  delayMicroseconds(5);
+  digitalWrite(TRIG_PIN, HIGH);
   delayMicroseconds(15);
-  digitalWrite(TRIG_PIN,LOW);
-  pulse = pulseIn(ECHO_PIN,HIGH);
-  distance = round( pulse*0.01657 );
+  digitalWrite(TRIG_PIN, LOW);
+  pulse = pulseIn(ECHO_PIN, HIGH);
+  distance = round( pulse * 0.01657 );
   Serial.println(distance);
 }
 
 void watchsurrounding()
-{ //Meassures distances to the right, left, front, left diagonal, right diagonal and asign them in cm to the variables rightscanval, 
+{ //Meassures distances to the right, left, front, left diagonal, right diagonal and asign them in cm to the variables rightscanval,
   //leftscanval, centerscanval, ldiagonalscanval and rdiagonalscanval (there are 5 points for distance testing)
   scan();
   FrontDistance = distance;
   Serial.println("Front distance measuring done");
-  if(FrontDistance < distanceLimit) 
+  if (FrontDistance < distanceLimit)
   {
-    moveStop;
+    moveStop();
   }
   servo_head.write(135);
   delay(50);
   scan();
   LeftDiagonalDistance = distance;
   Serial.println("Left diagonal distance measuring done");
-  if(LeftDiagonalDistance < distanceLimit)
+  if (LeftDiagonalDistance < distanceLimit)
   {
     moveStop();
   }
@@ -102,17 +102,17 @@ void watchsurrounding()
   scan();
   LeftDistance = distance;
   Serial.println("Left distance measuring done");
-  if(LeftDistance < sideDistanceLimit)
+  if (LeftDistance < sideDistanceLimit)
   {
     moveStop();
   }
-  
+
   servo_head.write(90);
   delay(150);
   scan();
   FrontDistance = distance;
   Serial.println("Front distance measuring done");
-  if(FrontDistance < distanceLimit)
+  if (FrontDistance < distanceLimit)
   {
     moveStop();
   }
@@ -121,7 +121,7 @@ void watchsurrounding()
   scan();
   RightDiagonalDistance = distance;
   Serial.println("Right diagonal distance measuring done");
-  if(RightDiagonalDistance < distanceLimit)
+  if (RightDiagonalDistance < distanceLimit)
   {
     moveStop();
   }
@@ -130,43 +130,44 @@ void watchsurrounding()
   scan();
   RightDistance = distance;
   Serial.println("Right distance measuring done");
-  if(RightDistance < sideDistanceLimit)
+  if (RightDistance < sideDistanceLimit)
   {
     moveStop();
   }
- 
+
   servo_head.write(90); //Finish looking around (look forward again)
   delay(150);
   Serial.println("Measuring done");
 }
 
 
-char decide(){
-   // Decide the right way without obstacles
+char decide() {
+  // Decide the right way without obstacles
   watchsurrounding();
-  if (LeftDistance > RightDistance && LeftDistance > FrontDistance){
-    if(RightDistance < minTurnDistanceLimit){
-      Serial.println("Choice result is: BACK"); 
+  if (LeftDistance > RightDistance && LeftDistance > FrontDistance) {
+    if (RightDistance < minTurnDistanceLimit) {
+      Serial.println("Choice result is: BACK");
       choice = 'b';
-    }else{
-    Serial.println("Choise result is: LEFT");
-    choice = 'l';
+    } else {
+      Serial.println("Choise result is: LEFT");
+      choice = 'l';
     }
   }
-  else if (RightDistance > LeftDistance && RightDistance > FrontDistance){
-    if(LeftDistance < minTurnDistanceLimit){
-      Serial.println("Choice result is: BACK"); 
+  else if (RightDistance > LeftDistance && RightDistance > FrontDistance) {
+    if (LeftDistance < minTurnDistanceLimit) {
+      Serial.println("Choice result is: BACK");
       choice = 'b';
-      }else{
-        Serial.println("Choise result is: RIGHT");
-        choice = 'r';
-        }
+    } else {
+      Serial.println("Choise result is: RIGHT");
+      choice = 'r';
+    }
   }
-  else if ( LeftDistance < sideDistanceLimit && RightDistance < sideDistanceLimit && FrontDistance < distanceLimit ) {
-    Serial.println("Choice result is: BACK"); 
+  else if ( LeftDistance < sideDistanceLimit && RightDistance < sideDistanceLimit
+            && FrontDistance < distanceLimit ) {
+    Serial.println("Choice result is: BACK");
     choice = 'b';
   }
-  else{
+  else {
     Serial.println("Choise result is: FORWARD");
     choice = 'f';
   }
@@ -178,31 +179,31 @@ char decide(){
 //-----------------------//
 
 //Stani
-void moveStop(){
+void moveStop() {
   motorL.run(RELEASE);
   motorR.run(RELEASE);
 }
 
 //Naprijed
-void moveForward(){
+void moveForward() {
   motorL.run(FORWARD);
   motorR.run(FORWARD);
 }
 
 //Nazad
-void moveBackward(){
+void moveBackward() {
   motorL.run(BACKWARD);
   motorR.run(BACKWARD);
 }
 
 //Desno
-void moveRight(){
+void moveRight() {
   motorL.run(FORWARD);
   motorR.run(BACKWARD);
 }
 
 //Lijevo
-void moveLeft(){
+void moveLeft() {
   motorL.run(BACKWARD);
   motorR.run(FORWARD);
 }
@@ -211,57 +212,57 @@ void moveLeft(){
 void go() {
   moveForward();
   ++numcycles;
-  if(numcycles>5)  // After 40 cycles of code measure surrounding obstacles
+  if (numcycles > 40) // After 40 cycles of code measure surrounding obstacles
   {
     Serial.println("Front obstancle detected");
     watchsurrounding();
-    if( LeftDistance < sideDistanceLimit || LeftDiagonalDistance < sideDistanceLimit)
+    if ( LeftDistance < sideDistanceLimit || LeftDiagonalDistance < sideDistanceLimit)
     {
       Serial.println("Moving: RIGHT");
       moveRight();
       delay(turnTime);
     }
-    if( RightDistance < sideDistanceLimit || RightDiagonalDistance < sideDistanceLimit)
+    if ( RightDistance < sideDistanceLimit || RightDiagonalDistance < sideDistanceLimit)
     {
       Serial.println("Moving: LEFT");
       moveLeft();
       delay(turnTime);
     }
-    numcycles=0; //Restart count of cycles
+    numcycles = 0; //Restart count of cycles
   }
   scan();
-  if( distance < distanceLimit)
+  if ( distance < distanceLimit)
   {
     distanceCounter++;
   }
-  if( distance > distanceLimit)
+  if ( distance > distanceLimit)
   {
     distanceCounter = 0;
   }
-  if(distanceCounter > 2)    // robot reachaed 3 times distance limit in front of the robot, so robot must stop immediately and decide right way
+  if (distanceCounter > 3)   // robot reachaed 3 times distance limit in front of the robot, so robot must stop immediately and decide right way
   {
     moveStop();
     turnDirection = decide();
-     switch (turnDirection){
+    switch (turnDirection) {
       case 'l':
         moveLeft();
         delay(turnTime);
-//        buzz();
+        //        buzz();
         break;
       case 'r':
         moveRight();
         delay(turnTime);
-//        buzz();
+        //        buzz();
         break;
       case 'b':
         moveBackward();
         delay(turnTime);
         moveRight();
         delay(turnTime);
-//        buzz();
+        //        buzz();
         break;
       case 'f':
-//        buzz();
+        //        buzz();
         break;
     }
     distanceCounter = 0;
@@ -269,4 +270,4 @@ void go() {
 }
 
 
-  
+

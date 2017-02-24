@@ -1,6 +1,6 @@
 class LM335
 {
-  const float tempCoef = 0.010096;
+  const float tempCoef = 0.010076;
   float cal;
   int pin;
   public:
@@ -45,7 +45,7 @@ float LM335::measureRankine()
   return measureF() + 458.67;
 }
 
-LM335 mTemp(5.04, A0);//supply volts, analog pin
+LM335 mTemp(5.00, A0);//supply volts, analog pin
 
 void setup()
 {
