@@ -1,6 +1,4 @@
-
-#include <Manchester.h>
-
+#include <ManchesterRF.h>
 /*
 
   Manchester Receiver example
@@ -21,27 +19,29 @@
 
 */
 
-#define RX_PIN 4
-#define LED_PIN 13
+#define TX_PIN 0
+#define LED_PIN 1
+
+ /*link speed, try also MAN_300, MAN_600, MAN_1200, 
+   MAN_2400, MAN_4800, MAN_9600, MAN_19200, MAN_38400*/
+ManchesterRF rf(MAN_1200);
 
 uint8_t moo = 1;
-#define BUFFER_SIZE 10
+#define BUFFER_SIZE 8
 uint8_t buffer[BUFFER_SIZE];
 
 void setup() {
   pinMode(LED_PIN, OUTPUT);  
   digitalWrite(LED_PIN, moo);
-  man.setupReceive(RX_PIN, MAN_1200);
-  man.beginReceiveArray(BUFFER_SIZE, buffer);
+  rf.TXInit(TX_PIN);
 }
 
 void loop() {
-  if (man.receiveComplete()) {
-    uint8_t receivedSize = 0;
-    //do something with the data in 'buffer' here before you start receiving to the same buffer again
-    //...
-    man.beginReceiveArray(BUFFER_SIZE, buffer);
-    moo = ++moo % 2;
-    digitalWrite(LED_PIN, moo);
+  for (int i = 0; i < BUFFER_SIZE; i++) {
+     buffer[i] = i * i;
+     rf.transmitArray(BUFFER_SIZE, buffer);
   }
+  digitalWrite(LED_PIN, digitalRead(LED_PIN)); //blink the LED on receive
+  
+  delay(100);
 }

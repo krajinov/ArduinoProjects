@@ -48,6 +48,13 @@ float temp;
 float hum;
 
 BLYNK_READ(V1) {
+  //Maybe...
+  //  temp = 0;
+//  int i = 100,
+//  for(i=0; i<=100; i++){
+//    temp += dht.readTemperature();
+//    }
+//  temp /= 100;
   temp = dht.readTemperature();
   Blynk.virtualWrite(V1, temp);
 }
