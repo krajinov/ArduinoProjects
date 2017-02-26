@@ -29,10 +29,10 @@ char choice;
 char turnDirection;  // Gets 'l', 'r' or 'f' depending on which direction is obstacle free
 
 // There are limits for obstacles:
-const int distanceLimit = 20;           // Front distance limit in cm
+const int distanceLimit = 25;           // Front distance limit in cm
 const int sideDistanceLimit = 17;       // Side distance limit in cm
 const int minTurnDistanceLimit = 11;       // Side distance limit in cm
-const int turnTime = 2000;               // Time needed to turn robot
+const int turnTime = 900;               // Time needed to turn robot
 
 int distanceCounter = 0;
 int numcycles = 0;  // Number of cycles used to rotate with head during moving
@@ -48,8 +48,8 @@ void setup() {
   servo_head.write(90);
 
   // turn on motor #2
-  motorL.setSpeed(255);
-  motorR.setSpeed(255);
+  motorL.setSpeed(150);
+  motorR.setSpeed(150);
   moveStop();
   delay(1500);
 }
@@ -69,13 +69,15 @@ int scan()                               //This function determines the distance
   long pulse;
   Serial.println("Scanning distance");
   digitalWrite(TRIG_PIN, LOW);
-  delayMicroseconds(5);
+  delayMicroseconds(2);
   digitalWrite(TRIG_PIN, HIGH);
-  delayMicroseconds(15);
+  delayMicroseconds(10);
   digitalWrite(TRIG_PIN, LOW);
   pulse = pulseIn(ECHO_PIN, HIGH);
-  distance = round( pulse * 0.01657 );
-  Serial.println(distance);
+  //  distance = round( pulse * 0.01657 );
+  distance = pulse * 0.033 / 2;
+  Serial.print(distance);
+  Serial.println(" cm");
 }
 
 void watchsurrounding()
@@ -211,25 +213,6 @@ void moveLeft() {
 //Automatsko upravljanje
 void go() {
   moveForward();
-  ++numcycles;
-  if (numcycles > 40) // After 40 cycles of code measure surrounding obstacles
-  {
-    Serial.println("Front obstancle detected");
-    watchsurrounding();
-    if ( LeftDistance < sideDistanceLimit || LeftDiagonalDistance < sideDistanceLimit)
-    {
-      Serial.println("Moving: RIGHT");
-      moveRight();
-      delay(turnTime);
-    }
-    if ( RightDistance < sideDistanceLimit || RightDiagonalDistance < sideDistanceLimit)
-    {
-      Serial.println("Moving: LEFT");
-      moveLeft();
-      delay(turnTime);
-    }
-    numcycles = 0; //Restart count of cycles
-  }
   scan();
   if ( distance < distanceLimit)
   {
@@ -266,6 +249,25 @@ void go() {
         break;
     }
     distanceCounter = 0;
+  }
+  ++numcycles;
+  if (numcycles > 40) // After 40 cycles of code measure surrounding obstacles
+  {
+    Serial.println("Front obstancle detected");
+    watchsurrounding();
+    if ( LeftDistance < sideDistanceLimit || LeftDiagonalDistance < sideDistanceLimit)
+    {
+      Serial.println("Moving: RIGHT");
+      moveRight();
+      delay(turnTime);
+    }
+    if ( RightDistance < sideDistanceLimit || RightDiagonalDistance < sideDistanceLimit)
+    {
+      Serial.println("Moving: LEFT");
+      moveLeft();
+      delay(turnTime);
+    }
+    numcycles = 0; //Restart count of cycles
   }
 }
 
