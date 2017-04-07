@@ -13,48 +13,121 @@ ManchesterRF rf(MAN_600);
 
 uint8_t size;
 uint8_t *data;
+uint8_t moveTxt = 0;
+boolean revMov = false;
 char num[3];
+
+const uint8_t TILE_DEGR[8] =
+{ B00000000,
+  B00000000,
+  B00000000,
+  B00000000,
+  B00000110,
+  B00001001,
+  B00001001,
+  B00000110
+};
+const byte THERMOMETER[2][8] =
+{
+  { B00000000,
+    B11111100,
+    B00000010,
+    B00000001,
+    B01010001,
+    B01010010,
+    B11111100,
+    B00000000
+  },
+  { B00111000,
+    B01000111,
+    B10110000,
+    B10111000,
+    B10111101,
+    B10110101,
+    B01000111,
+    B00111000
+  }
+};
+const int THERMOMETER_LEN = sizeof(THERMOMETER) / 8;
+
+const byte HUM[2][8] =
+{
+  { B00011100,
+    B00100010,
+    B00100001,
+    B10100010,
+    B01011100,
+    B00100000,
+    B01000000,
+    B10000000
+  },
+  { B00000000,
+    B00000000,
+    B00000000,
+    B00000011,
+    B00000100,
+    B00000100,
+    B00000100,
+    B00000011
+  }
+};
+const int HUM_LEN = sizeof(HUM) / 8;
 
 void setup(void) {
   Serial.begin(9600);
   u8x8.begin();
   u8x8.setPowerSave(0);
+  u8x8.setContrast(100);
   u8x8.setFont(u8x8_font_pxplusibmcgathin_u);
   rf.RXInit(RX_PIN);
 }
 
 void loop(void) {
-
   if (rf.available()) { //something is in RX buffer
     if (rf.receiveArray(size, &data)) {
       //process the data
       for (int i = 0; i < size; i++) {
         Serial.println(data[i]); //do something with the data
       }
+      u8x8.clear();
+      // Draw thermometer
+      for (int i = 0; i < THERMOMETER_LEN; i++) {
+        u8x8.drawTile(moveTxt + 0, i + 1, 1, THERMOMETER[i]);
+      }
+      // Convert temperature integer to char array
+      convNumToCharArr(data[0]);
+      // Draw temp string
+      u8x8.draw2x2String(moveTxt + 2, 1, num);
+      u8x8.drawTile(moveTxt + 6, 1, 1, TILE_DEGR);
+      u8x8.draw2x2String(moveTxt + 7, 1, "C");
+
+      // Draw moisture custom char
+      for (int i = 0; i < HUM_LEN; i++) {
+        u8x8.drawTile(7 - moveTxt, i + 5, 1, HUM[i]);
+      }
+      // Convert humidity integer to char array
+      convNumToCharArr(data[1]);
+      // Draw humidity string
+      u8x8.draw2x2String(9 - moveTxt, 5, num);
+      u8x8.draw2x2String(14 - moveTxt, 5, "%");
+      moveColsCursor();
     }
-
-    u8x8.drawString(0, 1, "TEMP: ");
-    conNumToCharArr(data[0]);
-    u8x8.draw2x2String(6, 1, num);
-    u8x8.draw2x2String(10, 1, "'C");
-
-    u8x8.drawString(0, 4, "VLAZ: ");
-    conNumToCharArr(data[1]);
-    u8x8.draw2x2String(6, 4, num);
-    u8x8.draw2x2String(10, 4, "%");
-
-    //    u8x8.setCursor(0, 1);
-    //    u8x8.print("TEMP: ");
-    //    u8x8.print(data[0]);
-    //    u8x8.print("'C");
-    //    u8x8.setCursor(0, 4);
-    //    u8x8.print("VLAZ: ");
-    //    u8x8.print(data[1]);
-    //    u8x8.print("%");
-    //    u8x8.refreshDisplay();
   }
 }
-void conNumToCharArr(int number) {
+
+void convNumToCharArr(int number) {
   String str = String(number);
   str.toCharArray(num, 3);
+}
+
+void moveColsCursor() {
+  if (moveTxt == 7) revMov = true;
+  else if(moveTxt == 0) revMov = false;
+  
+  if (moveTxt >= 0 && moveTxt < 7 && !revMov) {
+    moveTxt ++;
+  }
+  else {
+    moveTxt--;
+  }
 }
