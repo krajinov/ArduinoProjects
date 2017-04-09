@@ -45,7 +45,7 @@ float LM335::measureRankine()
   return measureF() + 458.67;
 }
 
-LM335 mTemp(5.00, A0);//supply volts, analog pin
+LM335 mTemp(4.93, A0);//supply volts, analog pin
 
 void setup()
 {
