@@ -42,7 +42,7 @@ char auth[] = "f3814f97c9e747ebb80129aa257e3825";
 // Your WiFi credentials.
 // Set password to "" for open networks.
 char ssid[] = "sonicwall-38A5";
-char pass[] = "e4c6d4d5Nc3";
+char pass[] = "xxxxxxxxx";
 
 float temp;
 float hum;
