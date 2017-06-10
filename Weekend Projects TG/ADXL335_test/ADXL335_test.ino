@@ -1,26 +1,27 @@
-// Raw Ranges: X: 394-598, Y: 392-594, Z: 406-608
-// 492, 487, 607 :: -0.04G, -0.06G, 1.00G
+// My results:
+// Raw Ranges: X: 402-608, Y: 400-605, Z: 413-617
+// 505, 503, 617 :: 0.00G, 0.00G, 1.00G
 
-const int xInput = A0;
-const int yInput = A1;
-const int zInput = A2;
-const int buttonPin = 2;
+
+const uint8_t xInput = A0;
+const uint8_t yInput = A1;
+const uint8_t zInput = A2;
  
 // Raw Ranges:
 // initialize to mid-range and allow calibration to
 // find the minimum and maximum for each axis
 
-int xRawMin = 394;
-int xRawMax = 598;
+uint16_t xRawMin = 402;
+uint16_t xRawMax = 608;
  
-int yRawMin = 392;
-int yRawMax = 594;
+uint16_t yRawMin = 400;
+uint16_t yRawMax = 605;
  
-int zRawMin = 406;
-int zRawMax = 608;
+uint16_t zRawMin = 413;
+uint16_t zRawMax = 617;
  
 // Take multiple samples to reduce noise
-const int sampleSize = 10;
+const int sampleSize = 15;
  
 void setup() 
 {
@@ -30,9 +31,9 @@ void setup()
  
 void loop() 
 {
-  int xRaw = ReadAxis(xInput);
-  int yRaw = ReadAxis(yInput);
-  int zRaw = ReadAxis(zInput);
+  uint16_t xRaw = ReadAxis(xInput);
+  uint16_t yRaw = ReadAxis(yInput);
+  uint16_t zRaw = ReadAxis(zInput);
   
   Serial.print("Raw Ranges: X: ");
   Serial.print(xRawMin);
@@ -79,14 +80,14 @@ void loop()
 //
 // Read "sampleSize" samples and report the average
 //
-int ReadAxis(int axisPin)
+uint16_t ReadAxis(uint8_t axisPin)
 {
   long reading = 0;
-  analogRead(axisPin);
-  delay(1);
+  
   for (int i = 0; i < sampleSize; i++)
   {
     reading += analogRead(axisPin);
+    delay(1);
   }
   return reading/sampleSize;
 }
