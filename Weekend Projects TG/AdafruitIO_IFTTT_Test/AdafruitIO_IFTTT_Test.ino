@@ -20,7 +20,7 @@
 
 /************************ Example Starts Here *******************************/
 
-// digital pin 5
+// digital pin 15
 #define LED_PIN 15
 
 // set up the 'digital' feed
@@ -75,7 +75,7 @@ void loop() {
 void handleMessage(AdafruitIO_Data *data) {
 
   Serial.print("received <- ");
-  static uint8_t state = LOW;
+  uint8_t state = LOW;
   if(data->toString() == "ON") {
      Serial.println("HIGH");
      state = HIGH;

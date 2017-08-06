@@ -11,9 +11,9 @@
 #include <WiFiClientSecure.h>
 
 //------- Replace the following! ------
-char ssid[] = "xxx-xx";       // your network SSID (name)
-char password[] = "xxx";  // your network key
-#define KEY "xxx"  // Get it from this page https://ifttt.com/services/maker/settings
+char ssid[] = "sonicwall-38A5";       // your network SSID (name)
+char password[] = "e4c6d4d5Nc3";  // your network key
+#define KEY "baLqXCfDaR2EcyIkspoIgF"  // Get it from this page https://ifttt.com/services/maker/settings
 #define EVENT_NAME "button_notify" // Name of your event name, set when you are creating the applet
 
 const int BUTTON = 4;
