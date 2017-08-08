@@ -1,0 +1,5 @@
+{
+    "board": "arduino:avr:uno",
+    "sketch": "Weekend Projects TG\\Radio_test\\Radio_test.ino",
+    "port": "COM5"
+}

@@ -3,8 +3,8 @@
 //This particular file may be licensed under the MIT/x11, New BSD or ColorChord Licenses.
 
 // var wsUri = "ws://" + location.host + ":81/";
-var wsUri = "ws://witty.local:81/";
-//var wsUri = "ws://192.168.0.107:81/";
+//var wsUri = "ws://witty.local:81/";
+var wsUri = "ws://192.168.168.17:81/";
 
 var output;
 var websocket;

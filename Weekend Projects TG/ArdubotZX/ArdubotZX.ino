@@ -6,8 +6,8 @@
 #include <Servo.h>
 
 // DC motor on M1&M2
-AF_DCMotor motorL(1);
-AF_DCMotor motorR(2);
+AF_DCMotor motorR(1);
+AF_DCMotor motorL(2);
 // DC hobby servo
 Servo servo_head;
 
@@ -47,7 +47,7 @@ void setup() {
   servo_head.attach(10);
   servo_head.write(90);
 
-  // turn on motor #2
+  // set speed on motors
   motorL.setSpeed(150);
   motorR.setSpeed(150);
   moveStop();

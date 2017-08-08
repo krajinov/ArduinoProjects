@@ -19,8 +19,8 @@ const int RED = 15;
 const int GREEN = 12;
 const int BLUE = 13;
 
-const char* ssid = "TelemachB1F24";
-const char* password = "23116f1c2558699";
+const char* ssid = "sonicwall-38A5";
+const char* password = "e4c6d4d5Nc3";
 const char* host = "witty";
 
 ESP8266WebServer server(80);

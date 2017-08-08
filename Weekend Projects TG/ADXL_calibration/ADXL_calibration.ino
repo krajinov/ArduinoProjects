@@ -1,5 +1,6 @@
-// Raw Ranges: X: 394-598, Y: 392-594, Z: 406-607
-// 492, 487, 607 :: -0.04G, -0.06G, 1.00G
+// My results:
+// Raw Ranges: X: 402-608, Y: 400-605, Z: 413-617
+// 505, 503, 617 :: 0.00G, 0.00G, 1.00G
 
 const int xInput = A0;
 const int yInput = A1;

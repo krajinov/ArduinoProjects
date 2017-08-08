@@ -42,6 +42,9 @@ void loop() {
         sendDhtData();      // send data
         break;
       default:
+        data[0] = chk;
+        data[1] = chk;
+        rf.transmitArray(arrSize, data);
         break;
     }
     // Set system into the sleep
