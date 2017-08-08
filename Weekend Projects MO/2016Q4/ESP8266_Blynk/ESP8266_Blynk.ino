@@ -31,7 +31,7 @@
 #include "DHT.h"
 
 #define DHTPIN 14     // what digital pin we're connected to
-#define DHTTYPE DHT22   // DHT 22  (AM2302), AM2321
+#define DHTTYPE DHT11   // DHT 22  (AM2302), AM2321
 
 DHT dht(DHTPIN, DHTTYPE);
 
@@ -41,8 +41,8 @@ char auth[] = "f3814f97c9e747ebb80129aa257e3825";
 
 // Your WiFi credentials.
 // Set password to "" for open networks.
-char ssid[] = "sonicwall-38A5";
-char pass[] = "xxxxxxxxx";
+char ssid[] = "TelemachB1F24";
+char pass[] = "23116f1c2558699";
 
 float temp;
 float hum;

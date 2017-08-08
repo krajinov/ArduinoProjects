@@ -16,7 +16,7 @@
 #define arrSize 2
 volatile boolean f_wdt = 1;
 
-ManchesterRF rf(MAN_600); //link speed, try also MAN_300, MAN_600, MAN_1200, MAN_2400, MAN_4800, MAN_9600, MAN_19200, MAN_38400
+ManchesterRF rf(MAN_1200); //link speed, try also MAN_300, MAN_600, MAN_1200, MAN_2400, MAN_4800, MAN_9600, MAN_19200, MAN_38400
 dht DHT;
 
 uint8_t data[arrSize];
