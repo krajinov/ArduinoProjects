@@ -41,7 +41,7 @@ char auth[] = "f3814f97c9e747ebb80129aa257e3825";
 
 // Your WiFi credentials.
 // Set password to "" for open networks.
-char ssid[] = "TelemachB1F24";
+char ssid[] = "MT4209";
 char pass[] = "23116f1c2558699";
 
 float temp;
