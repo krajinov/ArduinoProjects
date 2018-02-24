@@ -20,7 +20,7 @@ void draw()
 void setup()
 {
   u8g2.begin(); 
-  u8g2.setContrast(15);
+  u8g2.setContrast(7);
   u8g2.enableUTF8Print();
   u8g2.setFont(u8g2_font_profont22_tf);   // select font
 }

@@ -29,14 +29,37 @@
 #include <ESP8266WiFi.h>
 #include <BlynkSimpleEsp8266.h>
 
-// You should get Auth Token in the Blynk App.
-// Go to the Project Settings (nut icon).
-char auth[] = "7c2ebe25730740d194de794242ad20c8";
+#include "DHT.h"
 
 // Your WiFi credentials.
 // Set password to "" for open networks.
 char ssid[] = "sonicwall-38A5";
 char pass[] = "e4c6d4d5Nc3";
+
+// You should get Auth Token in the Blynk App.
+// Go to the Project Settings (nut icon).
+char auth[] = "7c2ebe25730740d194de794242ad20c8";
+
+#define DHTPIN D5     // what digital pin we're connected to
+#define DHTTYPE DHT11   // DHT 22  (AM2302), AM2321
+
+DHT dht(DHTPIN, DHTTYPE);
+
+float temp;
+float hum;
+
+BLYNK_READ(V1) {
+  temp = dht.readTemperature();
+  if (!isnan(temp)) {
+    Blynk.virtualWrite(V1, temp);
+  }
+}
+BLYNK_READ(V2) {
+  hum = dht.readHumidity();
+  if (!isnan(hum)) {
+  Blynk.virtualWrite(V2, hum);
+  }
+}
 
 void setup()
 {

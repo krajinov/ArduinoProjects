@@ -9,13 +9,14 @@
 U8X8_SH1106_128X64_NONAME_4W_HW_SPI u8x8(/* cs=*/ 10, /* dc=*/ 9, /* reset=*/ 8);
 
 #define RX_PIN 4 //any pin can receive
-ManchesterRF rf(MAN_600);
+ManchesterRF rf(MAN_1200);
 
+const uint8_t arrSize = 3;
 uint8_t size;
-uint8_t *data;
+int8_t *data;
 uint8_t moveTxt = 0;
 boolean revMov = false;
-char num[3];
+char num[arrSize];
 
 const uint8_t TILE_DEGR[8] =
 { B00000000,
@@ -90,26 +91,13 @@ void loop(void) {
         Serial.println(data[i]); //do something with the data
       }
       u8x8.clear();
-      // Draw thermometer
-      for (int i = 0; i < THERMOMETER_LEN; i++) {
-        u8x8.drawTile(moveTxt + 0, i + 1, 1, THERMOMETER[i]);
-      }
-      // Convert temperature integer to char array
-      convNumToCharArr(data[0]);
-      // Draw temp string
-      u8x8.draw2x2String(moveTxt + 2, 1, num);
-      u8x8.drawTile(moveTxt + 6, 1, 1, TILE_DEGR);
-      u8x8.draw2x2String(moveTxt + 7, 1, "C");
 
-      // Draw moisture custom char
-      for (int i = 0; i < HUM_LEN; i++) {
-        u8x8.drawTile(7 - moveTxt, i + 5, 1, HUM[i]);
-      }
-      // Convert humidity integer to char array
-      convNumToCharArr(data[1]);
-      // Draw humidity string
-      u8x8.draw2x2String(9 - moveTxt, 5, num);
-      u8x8.draw2x2String(14 - moveTxt, 5, "%");
+      //Draw temperature
+      drawTemp(data[0]);
+
+      //Draw humidity
+      drawHum(data[1]);
+
       moveColsCursor();
     }
   }
@@ -117,13 +105,40 @@ void loop(void) {
 
 void convNumToCharArr(int number) {
   String str = String(number);
-  str.toCharArray(num, 3);
+  str.toCharArray(num, arrSize);
+}
+
+void drawTemp(int8_t temp) {
+  // Draw thermometer
+  for (int i = 0; i < THERMOMETER_LEN; i++) {
+    u8x8.drawTile(moveTxt + 0, i + 1, 1, THERMOMETER[i]);
+  }
+  uint8_t shiftPos = (temp >= 0 && temp < 10) ? 0 : 1;
+  
+  // Convert temperature integer to char array
+  convNumToCharArr(data[0]);
+  // Draw temp string
+  u8x8.draw2x2String(moveTxt + 2, 1, num);
+  u8x8.drawTile(moveTxt + 5 + shiftPos, 1, 1, TILE_DEGR);
+  u8x8.draw2x2String(moveTxt + 6 + shiftPos, 1, "C");
+}
+
+void drawHum(int8_t hum) {
+  // Draw moisture custom char
+  for (int i = 0; i < HUM_LEN; i++) {
+    u8x8.drawTile(7 - moveTxt, i + 5, 1, HUM[i]);
+  }
+  // Convert humidity integer to char array
+  convNumToCharArr(data[1]);
+  // Draw humidity string
+  u8x8.draw2x2String(9 - moveTxt, 5, num);
+  u8x8.draw2x2String(14 - moveTxt, 5, "%");
 }
 
 void moveColsCursor() {
   if (moveTxt == 7) revMov = true;
-  else if(moveTxt == 0) revMov = false;
-  
+  else if (moveTxt == 0) revMov = false;
+
   if (moveTxt >= 0 && moveTxt < 7 && !revMov) {
     moveTxt ++;
   }

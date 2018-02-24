@@ -12,7 +12,7 @@
 
 
 #define RX_PIN 4 //any pin can receive
-#define LED_PIN 13
+#define LED_PIN 12
 
 ManchesterRF rf(MAN_4800); //link speed, try also MAN_300, MAN_600, MAN_1200, MAN_2400, MAN_4800, MAN_9600, MAN_19200, MAN_38400
 

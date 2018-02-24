@@ -12,20 +12,20 @@
 
 #define TX_PIN 0 //any pin can transmit
 #define LED_PIN 1
-#define DHT11_PIN 3
+#define DHT22_PIN 3
 #define arrSize 2
 volatile boolean f_wdt = 1;
 
 ManchesterRF rf(MAN_1200); //link speed, try also MAN_300, MAN_600, MAN_1200, MAN_2400, MAN_4800, MAN_9600, MAN_19200, MAN_38400
 dht DHT;
 
-uint8_t data[arrSize];
+int8_t data[arrSize];
 
 void setup() {
   pinMode(LED_PIN, OUTPUT);
   digitalWrite(LED_PIN, HIGH);
   rf.TXInit(TX_PIN);
-  setup_watchdog(8); // approximately 4 seconds sleep
+  setup_watchdog(9); // approximately 4 seconds sleep
 }
 
 void loop() {
@@ -35,16 +35,13 @@ void loop() {
     // Reset flag
     f_wdt = 0;
     // Read and set DHT values
-    int chk = DHT.read11(DHT11_PIN);
+    int chk = DHT.read22(DHT22_PIN);
     switch (chk)
     {
       case DHTLIB_OK:       // if everything goes well
         sendDhtData();      // send data
         break;
       default:
-        data[0] = chk;
-        data[1] = chk;
-        rf.transmitArray(arrSize, data);
         break;
     }
     // Set system into the sleep
