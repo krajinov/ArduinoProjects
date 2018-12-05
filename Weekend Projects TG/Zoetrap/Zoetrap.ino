@@ -11,7 +11,7 @@ int directionSwitchState = 0;
 int previousDirectionSwitchState = 0;
 
 int motorEnabled = 0;
-int motorSpeed = 0;
+int motorSpeed = 1;
 int motorDirection = 1;
 
 void setup() {
