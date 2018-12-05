@@ -11,7 +11,7 @@ int directionSwitchState = 0;
 int previousDirectionSwitchState = 0;
 
 int motorEnabled = 0;
-int motorSpeed = 0;
+int motorSpeed = 2;
 int motorDirection = 1;
 
 void setup() {
@@ -24,10 +24,10 @@ void setup() {
 }
 
 void loop() {
-  onOffSwitchState = 
+  onOffSwitchState =
         digitalRead(onOffSwitchStateSwitchPin);
   delay(1);
-  directionSwitchState = 
+  directionSwitchState =
         digitalRead(directionSwitchPin);
   motorSpeed = analogRead(potPin)/4;
   if(onOffSwitchState != previousOnOffSwitchState){
@@ -60,4 +60,3 @@ void loop() {
    previousDirectionSwitchState = directionSwitchState;
    previousOnOffSwitchState = onOffSwitchState;
    }
-      
